@@ -1,4 +1,4 @@
-FROM docker-mirror.banhammer.com/library/debian:stable
+FROM library/debian:stable
 
 RUN apt update && apt install -y --no-install-recommends \
   openssh-server
