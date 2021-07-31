@@ -7,7 +7,7 @@ fi
 
 # change default user name
 _default_user="username"
-USER_NAME=${USER_NAME:-$default_user}
+USER_NAME=${USER_NAME:-$_default_user}
 if [ "$USER_NAME" != "$_default_user" ]; then
   usermod -l "$USER_NAME" "$_default_user"
   groupmod -n "$USER_NAME" "$_default_user"
