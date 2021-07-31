@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ -n "${DEBUG:-}" ]; then
+  set -x
+fi
+
+# change default user name
+_default_user="username"
+USER_NAME=${USER_NAME:-$default_user}
+if [ "$USER_NAME" != "$_default_user" ]; then
+  usermod -l "$USER_NAME" "$_default_user"
+  groupmod -n "$USER_NAME" "$_default_user"
+fi
+
+# replace sshd config
+rm -Rf /etc/ssh
+cp -r /config /etc/ssh
+
+# fix up perms
+chmod 644 /etc/ssh/authorized_keys
+chown "$USER_NAME:$USER_NAME" /etc/ssh/authorized_keys
+chown "$USER_NAME:$USER_NAME" /data
+
+if [ -n "${DEBUG:-}" ]; then
+  /usr/sbin/sshd -dddd -D -e -f /config/sshd_config
+else
+  /usr/sbin/sshd -D -e -f /config/sshd_config
+fi

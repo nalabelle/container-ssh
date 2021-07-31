@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euxo pipefail
+
+# configure default account
+_user="username"
+useradd -U -d /data -m "$_user"
+usermod -G users "$_user"
+usermod -p '*' "$_user"
+passwd -u "$_user"
+
+# set up privilege separation directory
+mkdir -p /run/sshd
+chmod 0755 /run/sshd
+
