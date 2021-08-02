@@ -31,6 +31,10 @@ jobs:
       packages: write
 
     steps:
+      - name: Timestamp
+        id: date
+        run: echo "::set-output name=date::$(date +'+%s')"
+        
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -52,7 +56,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=schedule,prefix={{branch}}-{{sha}}-,pattern={{date 'YYYYMMDD'}}
+            type=raw,prefix={{branch}}-{{sha}}-,value=${{ steps.date.outputs.date }}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
