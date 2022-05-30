@@ -59,7 +59,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,prefix={{branch}}-{{sha}}-,value=${{ steps.date.outputs.date }}
+            type=raw,prefix={{branch}}{{pr}}-{{sha}}-,value=${{ steps.date.outputs.date }}
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
